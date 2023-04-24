@@ -254,4 +254,48 @@ class BinarySearchTree {
       console.error("k value exceeds the size of the BST.");
     }
   }
+
+  countLeaves(count = 0) {
+    // Base case: add 1 to the count for the current leaf
+    if (!this.left && !this.right) return count + 1;
+    
+    // Recursive case:
+    // If no left child, recurse down right subtree until leaf is found    
+    if (!this.left) return this.right.countLeaves(count);
+    // If no right child, recurse down left subtree until lead is found
+    if (!this.right) return this.right.countLeaves(count);
+    
+    // If both children exist, recurse down both subtrees in turn
+    const leftCount = this.left.countLeaves(count);
+    const rightCount = this.right.countLeaves(count);
+    
+    // Add the count of leaves in the left and right subtrees to the overall count
+    count += leftCount + rightCount;
+    
+    return count;
+  }
+
+  isBalancedBST() {
+    // If only root node, BST is balanced and has height of 0
+    if (!this.left && !this.right) return 0;
+    
+    // Initialize heights of subtrees
+    let leftHeight = 0;
+    let rightHeight = 0;
+    
+    // If left child exists, find its height
+    if (this.left) leftHeight = this.left.getHeight();
+    // If right child exists, find its height
+    if (this.right) rightHeight = this.right.getHeight();
+    
+    // If the absolute difference between the two subtrees is greater than 1,
+    // BST is not balanced, return -1
+    if (Math.abs(leftHeight - rightHeight) > 1) return -1;
+    
+    // If left height is one greater than right, return that height + 1
+    // (to account for root node)
+    if (leftHeight > rightHeight) return leftHeight + 1;
+    // If right is one greater, or both are equal, return height plus 1
+    else return rightHeight + 1;
+  }
 }
